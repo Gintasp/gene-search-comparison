@@ -41,7 +41,7 @@ class SeqUtils:
 
         return SeqFragmentCollection(
             self.seq_record,
-            self.__filter_out_shorter_than(start_stop_fragments, config.MIN_SEQUENCE_LENGTH)
+            self.__filter_out_shorter_than(start_stop_fragments, config.MIN_START_STOP_FRAGMENT_LENGTH)
         )
 
     @staticmethod

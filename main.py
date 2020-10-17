@@ -1,3 +1,4 @@
+from os import listdir
 from time import time
 
 from src.codon_freq import CodonFreqCalculator
@@ -5,14 +6,12 @@ from src.matrix import PhylipMatrix
 from src.seq_utils import SeqUtils
 from src.utils import project_root
 
-from config import config
-
 
 def get_filenames():
     files = []
 
-    for filename in config.FILENAMES:
-        files.append(f'{project_root()}/viruses/{filename}')
+    for filename in listdir(f'{project_root()}/dna-data'):
+        files.append(f'{project_root()}/dna-data/{filename}')
 
     return files
 
