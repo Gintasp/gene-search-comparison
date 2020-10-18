@@ -2,32 +2,43 @@ from os import listdir
 from time import time
 
 from src.codon_freq import CodonFreqCalculator
+from src.io import IO
 from src.matrix import PhylipMatrix
 from src.seq_utils import SeqUtils
 from src.utils import project_root
 
 
-def get_filenames():
-    files = []
+def get_file_paths():
+    paths = []
 
-    for filename in listdir(f'{project_root()}/dna-data'):
-        files.append(f'{project_root()}/dna-data/{filename}')
+    dna_files = listdir(f'{project_root()}/dna-data')
+    dna_files.sort()
 
-    return files
+    for filename in dna_files:
+        paths.append(f'{project_root()}/dna-data/{filename}')
+
+    return paths
 
 
 if __name__ == '__main__':
     start_time = time()
     freqCalculator = CodonFreqCalculator()
-    freq_tables = []
+    codon_freq_tables = []
+    dicodon_freq_tables = []
 
-    for file in get_filenames():
+    for file in get_file_paths():
         seq_fragment_collection = (SeqUtils(file)).find_start_stop_fragments()
-        freq_tables.append(freqCalculator.get_codon_freq_table(seq_fragment_collection))
+        codon_freq_tables.append(freqCalculator.get_codon_freq_table(seq_fragment_collection))
+        dicodon_freq_tables.append(freqCalculator.get_dicodon_freq_table(seq_fragment_collection))
         print('')
 
-    matrix = PhylipMatrix(freq_tables)
-    matrix.print()
+    IO.print('Generating Phylip matrix for codon frequencies...')
+    codon_matrix = PhylipMatrix(codon_freq_tables)
+    codon_matrix.print()
+
+    IO.print('Generating Phylip matrix for dicodon frequencies...')
+    dicodon_matrix = PhylipMatrix(dicodon_freq_tables)
+    dicodon_matrix.print()
 
     end_time = time()
 

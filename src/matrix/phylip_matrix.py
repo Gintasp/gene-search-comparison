@@ -1,6 +1,5 @@
 from typing import List
 
-from src.io import IO
 from src.model import FrequencyTable
 
 from config import config
@@ -11,8 +10,6 @@ class PhylipMatrix:
         self.__freq_tables = freq_tables
 
     def print(self) -> None:
-        IO.print('Generating Phylip Matrix...')
-
         self.__print_header()
         for freq_table in self.__freq_tables:
             print(freq_table.get_record().id, end=' ')
@@ -20,6 +17,7 @@ class PhylipMatrix:
                 distance = self.__calculate_distance(freq_table, freq_table_inner)
                 print(f'{format(distance, f".{config.PHYLIP_MATRIX_PRECISION}f")}', end=' ')
             print('')
+        print('')
 
     def __calculate_distance(self, freq_table_1: FrequencyTable, freq_table_2: FrequencyTable) -> float:
         codon_distances = []
