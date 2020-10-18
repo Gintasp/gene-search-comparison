@@ -45,18 +45,26 @@ class SeqUtils:
         )
 
     @staticmethod
-    def get_codons(seq: Seq, frame=0) -> List[Seq]:
-        codons = []
+    def get_codons(seq: Seq, frame=0) -> List[str]:
+        return SeqUtils.__chunk_seq(seq, frame, 3)
 
-        for index in range(frame, len(seq), 3):
-            codon = seq[index:index + 3]
+    @staticmethod
+    def get_dicodons(seq: Seq, frame=0) -> List[str]:
+        return SeqUtils.__chunk_seq(seq, frame, 6)
 
-            if len(codon) < 3:
+    @staticmethod
+    def __chunk_seq(seq: Seq, start: int, length: int) -> List[str]:
+        chunks = []
+
+        for index in range(start, len(seq), length):
+            chunk = seq[index:index + length]
+
+            if len(chunk) < length:
                 continue
 
-            codons.append(codon)
+            chunks.append(str(chunk))
 
-        return codons
+        return chunks
 
     @staticmethod
     def __filter_out_shorter_than(fragments: List[Seq], min_length: int) -> List[Seq]:
